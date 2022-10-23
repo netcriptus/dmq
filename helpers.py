@@ -1,44 +1,48 @@
+import json
 import os
 from pathlib import Path
-import json
-from PyQt6.QtWidgets import QComboBox, QStyledItemDelegate
-from PyQt6.QtCore import Qt, QEvent
+
+from PyQt6.QtCore import QEvent, Qt
 from PyQt6.QtGui import QFontMetrics, QStandardItem
+from PyQt6.QtWidgets import QComboBox, QStyledItemDelegate
 
 HOME = Path.home()
-APP_FOLDER=f"{HOME}/Library/DrugsQuiz"
+APP_FOLDER = f"{HOME}/Library/DrugsQuiz"
 DRUGS_REGISTRY = f"{APP_FOLDER}/drugs.json"
 
-units = ['mg', 'µg', 'mg/kgKG', 'µg/kgKG', 'mg/kgKG/h', 'µg/kgKG/h', 'ml', 'ml/kgKG']
+units = ["mg", "µg", "mg/kgKG", "µg/kgKG", "mg/kgKG/h", "µg/kgKG/h", "ml", "ml/kgKG"]
+
 
 def make_float(string):
     return float(string.replace(",", "."))
+
 
 def check_answer(drug, weigth, dose, unit):
     dose = make_float(dose)
     message = ""
 
-    with open(DRUGS_REGISTRY, 'r') as f:
-            current_content = json.loads(f.read())
+    with open(DRUGS_REGISTRY, "r") as f:
+        current_content = json.loads(f.read())
     info = current_content[drug]
 
-    if info['unit'].endswith('KG'):
-            info['unit'] = info['unit'].split('/')[0]
+    if info["unit"].endswith("KG"):
+        info["unit"] = info["unit"].split("/")[0]
 
-    if unit != info['unit']:
-            message += f'Wrong unit. The correct unit is {info["unit"]}\n'
+    if unit != info["unit"]:
+        message += f'Wrong unit. The correct unit is {info["unit"]}\n'
 
-    min_dose = make_float(info['min_dose'])
-    max_dose = make_float(info['max_dose'])
-    if not unit.endswith('/h'):
+    min_dose = make_float(info["min_dose"])
+    max_dose = make_float(info["max_dose"])
+    if not unit.endswith("/h"):
         min_dose *= weigth
         max_dose *= weigth
 
     if min_dose <= dose <= max_dose:
-        message += 'Correct dose!'
+        message += "Correct dose!"
     else:
-        message += f'Wrong dose. Correct answer is between {min_dose} and {max_dose}'
+        message += f"Wrong dose. Correct answer is between {min_dose} and {max_dose}"
     return message
+
 
 def ensure_file(file_path, empty_data):
     if not os.path.exists(file_path):
@@ -129,7 +133,9 @@ class CheckableComboBox(QComboBox):
 
         # Compute elided text (with "...")
         metrics = QFontMetrics(self.lineEdit().font())
-        elidedText = metrics.elidedText(text, Qt.TextElideMode.ElideRight, self.lineEdit().width())
+        elidedText = metrics.elidedText(
+            text, Qt.TextElideMode.ElideRight, self.lineEdit().width()
+        )
         self.lineEdit().setText(elidedText)
 
     def addItem(self, text, checked=False):
