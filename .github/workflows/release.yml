@@ -13,7 +13,7 @@ permissions:
   contents: read
 
 jobs:
-  build:
+  test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -24,11 +24,13 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install flake8 pytest
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
       - name: Lint with black
         run: |
           black --check --config pyproj.toml .
+      - name: Lint with isort
+        run: |
+          isort --check pyproj.toml .
       - name: Run tests with ain't nobody got time for that
         run: |
-          /bin/yes
+          /bin/true
