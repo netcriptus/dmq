@@ -30,7 +30,7 @@ jobs:
           black --check --config pyproj.toml .
       - name: Lint with isort
         run: |
-          isort --check pyproj.toml .
+          isort --check --profile black pyproj.toml .
       - name: Run tests with ain't nobody got time for that
         run: |
           /bin/true
