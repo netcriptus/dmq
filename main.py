@@ -5,12 +5,22 @@ import sys
 from pathlib import Path
 
 from PyQt6.QtCore import Qt
-from PyQt6.QtWidgets import (QApplication, QComboBox, QGridLayout, QHBoxLayout,
-                             QLabel, QLineEdit, QMainWindow, QPushButton,
-                             QStatusBar, QTextEdit, QVBoxLayout, QWidget)
+from PyQt6.QtWidgets import (
+    QApplication,
+    QComboBox,
+    QGridLayout,
+    QHBoxLayout,
+    QLabel,
+    QLineEdit,
+    QMainWindow,
+    QPushButton,
+    QStatusBar,
+    QTextEdit,
+    QVBoxLayout,
+    QWidget,
+)
 
-from helpers import (CheckableComboBox, check_answer, ensure_file, make_float,
-                     units)
+from helpers import CheckableComboBox, check_answer, ensure_file, make_float, units
 
 HOME = Path.home()
 APP_FOLDER = f"{HOME}/Library/DrugsQuiz"
@@ -146,11 +156,7 @@ class MainWindow(QMainWindow):
         layout.addWidget(unit, 1, 3)
 
         answer_button = QPushButton("Answer")
-        answer_button.clicked.connect(
-            lambda: self.answer(
-                drug, weigth, dose.text(), unit.currentText(), quiz_type
-            )
-        )
+        answer_button.clicked.connect(lambda: self.answer(drug, weigth, dose.text(), unit.currentText(), quiz_type))
         cancel_button = QPushButton("Cancel")
         cancel_button.clicked.connect(self.draw_start_screen)
 
@@ -175,11 +181,7 @@ class MainWindow(QMainWindow):
         layout.addWidget(combo_options)
 
         start_button = QPushButton("Start quiz")
-        start_button.clicked.connect(
-            lambda: self.draw_quiz_screen(
-                combo_options.currentText(), quiz_type="choose"
-            )
-        )
+        start_button.clicked.connect(lambda: self.draw_quiz_screen(combo_options.currentText(), quiz_type="choose"))
         cancel_button = QPushButton("Cancel")
         cancel_button.clicked.connect(self.draw_start_screen)
         layout.addWidget(start_button)
@@ -190,10 +192,7 @@ class MainWindow(QMainWindow):
     def save_drugs(self, layout):
         drugs = {}
         for i in range(1, layout.rowCount()):
-            if (
-                layout.itemAtPosition(i, 0) is None
-                or not layout.itemAtPosition(i, 0).widget().text()
-            ):
+            if layout.itemAtPosition(i, 0) is None or not layout.itemAtPosition(i, 0).widget().text():
                 continue
             name = layout.itemAtPosition(i, 0).widget().text()
             drugs[name] = {
@@ -226,9 +225,7 @@ class MainWindow(QMainWindow):
         save_button = QPushButton("Save")
         save_button.clicked.connect(lambda: self.save_drugs(layout))
         add_new_line_button = QPushButton("Add new line")
-        add_new_line_button.clicked.connect(
-            lambda: self._add_line(layout, self._create_form_line())
-        )
+        add_new_line_button.clicked.connect(lambda: self._add_line(layout, self._create_form_line()))
         cancel_button = QPushButton("Cancel")
         cancel_button.clicked.connect(self.draw_start_screen)
 
@@ -241,10 +238,7 @@ class MainWindow(QMainWindow):
     def save_situations(self, layout):
         situations = []
         for i in range(1, layout.rowCount()):
-            if (
-                layout.itemAtPosition(i, 0) is None
-                or not layout.itemAtPosition(i, 0).widget().toPlainText()
-            ):
+            if layout.itemAtPosition(i, 0) is None or not layout.itemAtPosition(i, 0).widget().toPlainText():
                 continue
             situation = layout.itemAtPosition(i, 0).widget().toPlainText()
             drugs = layout.itemAtPosition(i, 1).widget().currentData()
@@ -350,9 +344,7 @@ class MainWindow(QMainWindow):
 
         self._redraw_screen(layout)
         answer_button = QPushButton("Answer")
-        answer_button.clicked.connect(
-            lambda: self.answer_situation(random_item[1], drugs_box.currentData())
-        )
+        answer_button.clicked.connect(lambda: self.answer_situation(random_item[1], drugs_box.currentData()))
         cancel_button = QPushButton("Cancel")
         cancel_button.clicked.connect(self.draw_start_screen)
 
