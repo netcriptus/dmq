@@ -5,22 +5,12 @@ import sys
 from pathlib import Path
 
 from PyQt6.QtCore import Qt
-from PyQt6.QtWidgets import (
-    QApplication,
-    QComboBox,
-    QGridLayout,
-    QHBoxLayout,
-    QLabel,
-    QLineEdit,
-    QMainWindow,
-    QPushButton,
-    QStatusBar,
-    QTextEdit,
-    QVBoxLayout,
-    QWidget,
-)
+from PyQt6.QtWidgets import (QApplication, QComboBox, QGridLayout, QHBoxLayout,
+                             QLabel, QLineEdit, QMainWindow, QPushButton,
+                             QStatusBar, QTextEdit, QVBoxLayout, QWidget)
 
-from helpers import CheckableComboBox, check_answer, ensure_file, make_float, units
+from helpers import (CheckableComboBox, check_answer, ensure_file, make_float,
+                     units)
 
 HOME = Path.home()
 APP_FOLDER = f"{HOME}/Library/DrugsQuiz"

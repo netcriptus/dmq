@@ -1,3 +1,3 @@
 PyQt6
-black
-isort
+black==22.10.0
+isort==5.10.1
