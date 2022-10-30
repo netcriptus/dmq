@@ -1,20 +1,31 @@
 import json
 import os
-from pathlib import Path
 
 from PyQt6.QtCore import QEvent, Qt
 from PyQt6.QtGui import QFontMetrics, QStandardItem
 from PyQt6.QtWidgets import QComboBox, QStyledItemDelegate
 
-HOME = Path.home()
-APP_FOLDER = f"{HOME}/Library/DrugsQuiz"
-DRUGS_REGISTRY = f"{APP_FOLDER}/drugs.json"
+from .constants import DRUGS_REGISTRY, SITUATIONS_REGISTRY
 
 units = ["mg", "µg", "mg/kgKG", "µg/kgKG", "mg/kgKG/h", "µg/kgKG/h", "ml", "ml/kgKG"]
 
 
+def read_current_drugs():
+    with open(DRUGS_REGISTRY, "r") as f:
+        current_drugs = json.loads(f.read())
+    return current_drugs
+
+
+def read_current_situations():
+    with open(SITUATIONS_REGISTRY, "r") as f:
+        current_situations = json.loads(f.read())
+    return current_situations
+
+
 def make_float(string):
-    return float(string.replace(",", "."))
+    if isinstance(string, str):
+        string = string.replace(",", ".")
+    return float(string)
 
 
 def check_answer(drug, weigth, dose, unit):
@@ -133,7 +144,9 @@ class CheckableComboBox(QComboBox):
 
         # Compute elided text (with "...")
         metrics = QFontMetrics(self.lineEdit().font())
-        elidedText = metrics.elidedText(text, Qt.TextElideMode.ElideRight, self.lineEdit().width())
+        elidedText = metrics.elidedText(
+            text, Qt.TextElideMode.ElideRight, self.lineEdit().width()
+        )
         self.lineEdit().setText(elidedText)
 
     def addItem(self, text, checked=False):
