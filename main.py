@@ -67,21 +67,15 @@ class MainWindow(QMainWindow):
 
     def connect_start_screen_buttons(self):
         self.start_widget.register_drug.clicked.connect(self.draw_register_drug_screen)
-        self.start_widget.register_situation.clicked.connect(
-            self.draw_register_situation_screen
-        )
-        self.start_widget.situation_quiz.clicked.connect(
-            self.draw_situation_quiz_screen
-        )
+        self.start_widget.register_situation.clicked.connect(self.draw_register_situation_screen)
+        self.start_widget.situation_quiz.clicked.connect(self.draw_situation_quiz_screen)
         self.start_widget.random_quiz.clicked.connect(self.random_quiz)
         self.start_widget.choice_quiz.clicked.connect(self.draw_choose_quiz_screen)
 
     def draw_register_drug_screen(self):
         self.register_drug_widget = RegisterDrugs()
         self.register_drug_widget.cancel_button.clicked.connect(self.start_screen)
-        self.register_drug_widget.save_button.clicked.connect(
-            lambda: self.save_content(self.register_drug_widget)
-        )
+        self.register_drug_widget.save_button.clicked.connect(lambda: self.save_content(self.register_drug_widget))
         buttons = [
             self.register_drug_widget.cancel_button,
             self.register_drug_widget.save_button,
@@ -119,9 +113,7 @@ class MainWindow(QMainWindow):
         self.choose_drug_widget = ChooseDrugQuiz()
         self.choose_drug_widget.cancel_button.clicked.connect(self.start_screen)
         self.choose_drug_widget.start_button.clicked.connect(
-            lambda: self.draw_quiz_screen(
-                self.choose_drug_widget.combo_options.currentText(), quiz_type="choose"
-            )
+            lambda: self.draw_quiz_screen(self.choose_drug_widget.combo_options.currentText(), quiz_type="choose")
         )
         buttons = [
             self.choose_drug_widget.cancel_button,
@@ -133,9 +125,7 @@ class MainWindow(QMainWindow):
     def draw_quiz_screen(self, drug, quiz_type):
         quiz_widget = DrugQuiz(drug, quiz_type)
         quiz_widget.cancel_button.clicked.connect(self.start_screen)
-        quiz_widget.answer_button.clicked.connect(
-            lambda: self.check_drug_answer(quiz_widget)
-        )
+        quiz_widget.answer_button.clicked.connect(lambda: self.check_drug_answer(quiz_widget))
         buttons = [quiz_widget.cancel_button, quiz_widget.answer_button]
         self._draw_screen(quiz_widget, buttons)
 
@@ -156,9 +146,7 @@ class MainWindow(QMainWindow):
         if widget.quiz_type == "random":
             next_button.clicked.connect(self.random_quiz)
         else:
-            next_button.clicked.connect(
-                lambda: self.draw_quiz_screen(widget.drug, widget.quiz_type)
-            )
+            next_button.clicked.connect(lambda: self.draw_quiz_screen(widget.drug, widget.quiz_type))
         statusBar = QStatusBar()
         self.setStatusBar(statusBar)
         statusBar.addWidget(next_button)

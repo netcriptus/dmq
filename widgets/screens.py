@@ -81,9 +81,7 @@ class RegisterDrugs(QGridLayout):
 
         self.save_button = QPushButton("Save")
         self.add_new_line_button = QPushButton("Add new line")
-        self.add_new_line_button.clicked.connect(
-            lambda: self._add_line(self._create_form_line())
-        )
+        self.add_new_line_button.clicked.connect(lambda: self._add_line(self._create_form_line()))
         self.cancel_button = QPushButton("Cancel")
 
     def _create_form_line(self):
@@ -107,10 +105,7 @@ class RegisterDrugs(QGridLayout):
     def save(self):
         drugs = {}
         for i in range(1, self.rowCount()):
-            if (
-                self.itemAtPosition(i, 0) is None
-                or not self.itemAtPosition(i, 0).widget().text()
-            ):
+            if self.itemAtPosition(i, 0) is None or not self.itemAtPosition(i, 0).widget().text():
                 continue
             name = self.itemAtPosition(i, 0).widget().text()
             drugs[name] = {
@@ -168,10 +163,7 @@ class RegisterSituation(QGridLayout):
     def save(self):
         situations = []
         for i in range(1, self.rowCount()):
-            if (
-                self.itemAtPosition(i, 0) is None
-                or not self.itemAtPosition(i, 0).widget().toPlainText()
-            ):
+            if self.itemAtPosition(i, 0) is None or not self.itemAtPosition(i, 0).widget().toPlainText():
                 continue
             situation = self.itemAtPosition(i, 0).widget().toPlainText()
             drugs = self.itemAtPosition(i, 1).widget().currentData()
@@ -241,9 +233,7 @@ class DrugQuiz(QGridLayout):
         self.cancel_button = QPushButton("Cancel")
 
     def answer(self):
-        message = check_answer(
-            self.drug, self.weigth, self.dose.text(), self.unit.currentText()
-        )
+        message = check_answer(self.drug, self.weigth, self.dose.text(), self.unit.currentText())
         self.answer_window = AnswerWindow(message)
         self.answer_window.show()
 
