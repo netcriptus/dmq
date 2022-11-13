@@ -179,7 +179,18 @@ class SituationQuiz(QGridLayout):
         current_situations = read_current_situations()
         current_drugs = read_current_drugs()
         current_drugs = list(current_drugs.keys())
+        if not current_situations or not current_drugs:
+            self.draw_empty()
+        else:
+            self.draw_question(current_situations, current_drugs)
 
+        self.cancel_button = QPushButton("Cancel")
+
+    def draw_empty(self):
+        self.addWidget(QLabel("No situations or substances registered!"), 1, 0)
+        self.addWidget(QLabel("Register situations and substances on the home screen"), 2, 0)
+    
+    def draw_question(self, current_situations, current_drugs):
         random_item = random.choice(current_situations)
         self.correct_answer = random_item[1]
 
@@ -195,7 +206,7 @@ class SituationQuiz(QGridLayout):
         self.addWidget(self.drugs_box, 1, 1)
 
         self.answer_button = QPushButton("Answer")
-        self.cancel_button = QPushButton("Cancel")
+
 
     def answer(self):
         answer = self.drugs_box.currentData()
@@ -243,10 +254,19 @@ class ChooseDrugQuiz(QVBoxLayout):
         super().__init__()
         all_options = read_current_drugs()
         options = list(all_options.keys())
+        if not options:
+            self.draw_empty()
+        else:
+            self.draw_question(options)
 
+        self.cancel_button = QPushButton("Cancel")
+    
+    def draw_empty(self):
+        self.addWidget(QLabel("No substances registered!\nRegister substances on the home screen"))
+    
+    def draw_options(self, options):
         self.combo_options = QComboBox()
         self.combo_options.addItems(options)
         self.addWidget(self.combo_options)
 
         self.start_button = QPushButton("Start quiz")
-        self.cancel_button = QPushButton("Cancel")

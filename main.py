@@ -1,4 +1,3 @@
-import json
 import os
 import random
 import sys
@@ -41,7 +40,6 @@ class AnswerWindow(QWidget):
         self.layout.addWidget(self.button)
 
 
-# Subclass QMainWindow to customize your application's main window
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
@@ -100,26 +98,27 @@ class MainWindow(QMainWindow):
     def draw_situation_quiz_screen(self):
         self.situation_quiz_widget = SituationQuiz()
         self.situation_quiz_widget.cancel_button.clicked.connect(self.start_screen)
-        self.situation_quiz_widget.answer_button.clicked.connect(
-            lambda: self.check_situation_answer(self.situation_quiz_widget)
-        )
-        buttons = [
-            self.situation_quiz_widget.cancel_button,
-            self.situation_quiz_widget.answer_button,
-        ]
+        buttons = [self.situation_quiz_widget.cancel_button]
+        if hasattr(self.situation_quiz_widget, "answer_button"):
+            self.situation_quiz_widget.answer_button.clicked.connect(
+                lambda: self.check_situation_answer(self.situation_quiz_widget)
+            )
+            buttons.append(self.situation_quiz_widget.answer_button)
         self._draw_screen(self.situation_quiz_widget, buttons)
 
     def draw_choose_quiz_screen(self):
         self.choose_drug_widget = ChooseDrugQuiz()
         self.choose_drug_widget.cancel_button.clicked.connect(self.start_screen)
-        self.choose_drug_widget.start_button.clicked.connect(
-            lambda: self.draw_quiz_screen(self.choose_drug_widget.combo_options.currentText(), quiz_type="choose")
-        )
-        buttons = [
-            self.choose_drug_widget.cancel_button,
-            self.choose_drug_widget.start_button,
-        ]
-
+        buttons = [self.choose_drug_widget.cancel_button]
+        if hasattr(self.choose_drug_widget, "start_button"):
+            self.choose_drug_widget.start_button.clicked.connect(
+                lambda: self.draw_quiz_screen(
+                    self.choose_drug_widget.combo_options.currentText(),
+                    quiz_type="choose"
+                )
+            )
+            buttons.append(self.choose_drug_widget.answer_button)
+        
         self._draw_screen(self.choose_drug_widget, buttons)
 
     def draw_quiz_screen(self, drug, quiz_type):
@@ -135,6 +134,10 @@ class MainWindow(QMainWindow):
 
     def random_quiz(self):
         current_content = read_current_drugs()
+        if not current_content:
+            self.answer_window = AnswerWindow("No substances registered. Please register some substances first.")
+            self.answer_window.show()
+            return
         random_item = random.choice(list(current_content.keys()))
         self.draw_quiz_screen(random_item, "random")
 
